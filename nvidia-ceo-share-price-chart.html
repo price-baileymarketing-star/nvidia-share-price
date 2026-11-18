@@ -5,119 +5,91 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Nvidia share price, Oct 2025 to Nov 2026</title>
 <style>
-  /* Fill the iframe; the host page sets the iframe height. */
-  html, body { height: 100%; margin: 0; }
-  #wrap { position: relative; width: 100%; height: 100%; min-height: 320px;
-          font-family: Arial, Helvetica, sans-serif; }
+  html, body { margin: 0; }
+  /* Fully self-contained: no scripts, no external calls. Scales to the iframe width. */
+  svg { display: block; width: 100%; height: auto; font-family: Arial, Helvetica, sans-serif; }
 </style>
 </head>
 <body>
-  <div id="wrap">
-    <canvas id="nvda"
-      role="img"
-      aria-label="Line chart of Nvidia share price in US dollars from late October 2025 to November 2026. Four events are marked: first company to reach a 5 trillion dollar value in late October 2025 at about 207 dollars, record high near 238 dollars in early October 2026, board opens an investigation on 8 November 2026, and Jensen Huang resigns on 12 November 2026 closing at 166 dollars after an intraday low of 148.80 dollars.">
-      Nvidia share price rose to a record near 238 dollars in early October 2026, then fell, closing at 166 dollars on 12 November 2026 after an intraday low of 148.80 dollars when Jensen Huang resigned.
-    </canvas>
-  </div>
+<svg viewBox="0 0 760 360" role="img"
+  aria-label="Line chart of Nvidia share price in US dollars from late October 2025 to November 2026. Four events are marked: first company to reach a 5 trillion dollar value in late October 2025 at about 207 dollars, record high near 238 dollars in early October 2026, board opens an investigation on 8 November 2026, and Jensen Huang resigns on 12 November 2026 closing at 166 dollars after an intraday low of 148.80 dollars.">
 
-  <!-- Chart.js core plus the annotation plugin, from a public CDN -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/chartjs-plugin-annotation/3.0.1/chartjs-plugin-annotation.min.js"></script>
-  <script>
-    Chart.register(window['chartjs-plugin-annotation']);
+  <title>Nvidia share price, Oct 2025 to Nov 2026</title>
+  <text x="56" y="22" font-size="15" fill="#1a1a1a">Nvidia share price, Oct 2025 to Nov 2026</text>
+  <text x="56" y="40" font-size="12" fill="#555">Shares fell from a $238 record to a $166 close as Jensen Huang resigned</text>
 
-    // Price Bailey brand colours
-    var teal = '#008080', yellow = '#fcb53a', red = '#b70b4a';
+  <!-- gridlines and y-axis labels -->
+  <line x1="56" x2="740" y1="52"  y2="52"  stroke="#e5e5e5"/>
+  <line x1="56" x2="740" y1="114" y2="114" stroke="#e5e5e5"/>
+  <line x1="56" x2="740" y1="176" y2="176" stroke="#e5e5e5"/>
+  <line x1="56" x2="740" y1="238" y2="238" stroke="#e5e5e5"/>
+  <line x1="56" x2="740" y1="300" y2="300" stroke="#c3c2b7"/>
+  <text x="50" y="56"  text-anchor="end" font-size="12" fill="#555">$260</text>
+  <text x="50" y="118" text-anchor="end" font-size="12" fill="#555">$230</text>
+  <text x="50" y="180" text-anchor="end" font-size="12" fill="#555">$200</text>
+  <text x="50" y="242" text-anchor="end" font-size="12" fill="#555">$170</text>
+  <text x="50" y="304" text-anchor="end" font-size="12" fill="#555">$140</text>
+  <text x="18" y="176" text-anchor="middle" font-size="12" fill="#555" transform="rotate(-90 18 176)">Share price (USD)</text>
 
-    // Month label helper for the time axis
-    var MN = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
-    var d = function (y, m, day) { return Date.UTC(y, m, day); };
-    var fmt = function (ms) { var t = new Date(ms); return MN[t.getUTCMonth()] + ' ' + t.getUTCFullYear(); };
+  <!-- x-axis month labels -->
+  <text x="61.3"  y="318" text-anchor="middle" font-size="12" fill="#555">Nov 2025</text>
+  <text x="169.7" y="318" text-anchor="middle" font-size="12" fill="#555">Jan 2026</text>
+  <text x="274.5" y="318" text-anchor="middle" font-size="12" fill="#555">Mar 2026</text>
+  <text x="382.9" y="318" text-anchor="middle" font-size="12" fill="#555">May 2026</text>
+  <text x="491.3" y="318" text-anchor="middle" font-size="12" fill="#555">Jul 2026</text>
+  <text x="601.4" y="318" text-anchor="middle" font-size="12" fill="#555">Sep 2026</text>
+  <text x="709.8" y="318" text-anchor="middle" font-size="12" fill="#555">Nov 2026</text>
 
-    // Closing-price series. The four labelled events are verified against reporting;
-    // the interior monthly points are indicative and should be confirmed before publication.
-    var series = [
-      {x:d(2025,9,29), y:207}, {x:d(2025,11,31), y:187}, {x:d(2026,4,14), y:236},
-      {x:d(2026,5,30), y:200}, {x:d(2026,6,31), y:196}, {x:d(2026,7,31), y:215},
-      {x:d(2026,8,30), y:227}, {x:d(2026,9,2),  y:238}, {x:d(2026,9,31), y:206},
-      {x:d(2026,10,6), y:187}, {x:d(2026,10,10),y:169}, {x:d(2026,10,12),y:166}
-    ];
+  <!-- price line -->
+  <polyline fill="none" stroke="#008080" stroke-width="2"
+    points="56,161.5 167.9,202.9 406,101.6 489.5,176 544.6,184.3 599.6,145 652.9,120.2 656.5,97.5 708,163.6 718.7,202.9 725.8,240.1 729.4,246.3"/>
 
-    // Monthly x-axis ticks
-    var monthTicks = [], yy = 2025, mm = 10;
-    for (var i = 0; i < 13; i++) { monthTicks.push(Date.UTC(yy, mm, 1)); mm++; if (mm > 11) { mm = 0; yy++; } }
+  <!-- data points -->
+  <circle cx="56"    cy="161.5" r="3" fill="#008080"/>
+  <circle cx="167.9" cy="202.9" r="3" fill="#008080"/>
+  <circle cx="406"   cy="101.6" r="3" fill="#008080"/>
+  <circle cx="489.5" cy="176"   r="3" fill="#008080"/>
+  <circle cx="544.6" cy="184.3" r="3" fill="#008080"/>
+  <circle cx="599.6" cy="145"   r="3" fill="#008080"/>
+  <circle cx="652.9" cy="120.2" r="3" fill="#008080"/>
+  <circle cx="708"   cy="163.6" r="3" fill="#008080"/>
+  <circle cx="718.7" cy="202.9" r="3" fill="#008080"/>
+  <circle cx="725.8" cy="240.1" r="3" fill="#008080"/>
 
-    // Yellow marker for an event point
-    function pt(x, y) {
-      return { type:'point', xValue:x, yValue:y, radius:6, backgroundColor:yellow, borderColor:teal, borderWidth:1.5 };
-    }
-    // Yellow caption panel for an event, text in the given brand colour
-    function lbl(x, y, content, color, xA, yA) {
-      return { type:'label', xValue:x, yValue:y, content:content, color:color,
-               backgroundColor:yellow, padding:{x:5,y:3}, borderRadius:4, font:{size:11}, xAdjust:xA, yAdjust:yA };
-    }
+  <!-- intraday low mark -->
+  <line x1="729.4" x2="729.4" y1="246.3" y2="281.8" stroke="#b70b4a" stroke-width="1.5" stroke-dasharray="3 3"/>
+  <circle cx="729.4" cy="281.8" r="4" fill="#b70b4a"/>
+  <text x="719.4" y="285.8" text-anchor="end" font-size="11" fill="#b70b4a">Intraday low $148.80</text>
 
-    new Chart(document.getElementById('nvda'), {
-      type: 'line',
-      data: {
-        datasets: [{
-          label: 'Share price',
-          data: series,
-          borderColor: teal,
-          backgroundColor: 'rgba(0,128,128,0.08)',
-          borderWidth: 2,
-          tension: 0.25,
-          fill: true,
-          pointRadius: 3,
-          pointBackgroundColor: teal,
-          pointBorderColor: teal
-        }]
-      },
-      options: {
-        responsive: true,
-        maintainAspectRatio: false,
-        parsing: false,
-        layout: { padding: { top: 8, right: 14, left: 4 } },
-        plugins: {
-          legend: { display: false },
-          annotation: { annotations: {
-            // Four yellow event markers
-            p1: pt(d(2025,9,29), 207),
-            p2: pt(d(2026,9,2),  238),
-            p3: pt(d(2026,10,8), 180),   // 8 Nov interpolated (markets shut that weekend)
-            p4: pt(d(2026,10,12),166),
-            // Intraday low on 12 Nov, shown in red below the close
-            lowSeg: { type:'line', xMin:d(2026,10,12), xMax:d(2026,10,12), yMin:148.8, yMax:166,
-                      borderColor:red, borderWidth:1.5, borderDash:[3,3] },
-            lowPt:  { type:'point', xValue:d(2026,10,12), yValue:148.8, radius:4, backgroundColor:red, borderColor:red },
-            // Direct label for the red intraday-low mark
-            lowLbl: { type:'label', xValue:d(2026,10,12), yValue:148.8, content:'Intraday low $148.80',
-                      color:red, backgroundColor:'rgba(0,0,0,0)', font:{size:11}, xAdjust:-66, yAdjust:0 },
-            // Captions
-            l1: lbl(d(2025,9,29), 207, ['First to $5tn','Oct 2025'], teal, 42, -26),
-            l2: lbl(d(2026,9,2),  238, ['Record high ~$238','(~$5.7tn)'], teal, -4, -24),
-            l3: lbl(d(2026,10,8), 180, ['Investigation','opens, 8 Nov'], red, -48, -2),
-            l4: lbl(d(2026,10,12),166, ['Huang resigns, 12 Nov','closed $166 (-4%)'], red, -70, -20)
-          } }
-        },
-        scales: {
-          y: {
-            min: 140, max: 260,
-            title: { display: true, text: 'Share price (USD)', color: '#666', font: { size: 12 } },
-            ticks: { color: '#666', callback: function (v) { return '$' + v; } },
-            grid: { color: 'rgba(137,135,129,0.2)' }
-          },
-          x: {
-            type: 'linear',
-            min: d(2025,9,20), max: d(2026,10,22),
-            title: { display: true, text: 'Date', color: '#666', font: { size: 12 } },
-            afterBuildTicks: function (a) { a.ticks = monthTicks.map(function (v) { return { value:v }; }); },
-            ticks: { color: '#666', maxRotation: 45, callback: function (v) { return fmt(v); } },
-            grid: { display: false }
-          }
-        }
-      }
-    });
-  </script>
+  <!-- leader lines -->
+  <line x1="56"    y1="161.5" x2="116" y2="127" stroke="#c3c2b7"/>
+  <line x1="656.5" y1="97.5"  x2="532" y2="71"  stroke="#c3c2b7"/>
+  <line x1="722.2" y1="219.4" x2="618" y2="161" stroke="#c3c2b7"/>
+  <line x1="729.4" y1="246.3" x2="590" y2="221" stroke="#c3c2b7"/>
+
+  <!-- event markers -->
+  <circle cx="56"    cy="161.5" r="6" fill="#fcb53a" stroke="#008080" stroke-width="1.5"/>
+  <circle cx="656.5" cy="97.5"  r="6" fill="#fcb53a" stroke="#008080" stroke-width="1.5"/>
+  <circle cx="722.2" cy="219.4" r="6" fill="#fcb53a" stroke="#008080" stroke-width="1.5"/>
+  <circle cx="729.4" cy="246.3" r="6" fill="#fcb53a" stroke="#008080" stroke-width="1.5"/>
+
+  <!-- event labels -->
+  <rect x="66"  y="112" width="100" height="30" rx="4" fill="#fcb53a"/>
+  <text x="72"  y="125" font-size="11" fill="#008080">First to $5tn</text>
+  <text x="72"  y="138" font-size="11" fill="#008080">Oct 2025</text>
+
+  <rect x="470" y="56"  width="124" height="30" rx="4" fill="#fcb53a"/>
+  <text x="476" y="69"  font-size="11" fill="#008080">Record high ~$238</text>
+  <text x="476" y="82"  font-size="11" fill="#008080">(~$5.7tn)</text>
+
+  <rect x="556" y="146" width="124" height="30" rx="4" fill="#fcb53a"/>
+  <text x="562" y="159" font-size="11" fill="#b70b4a">Investigation opens</text>
+  <text x="562" y="172" font-size="11" fill="#b70b4a">8 Nov</text>
+
+  <rect x="512" y="206" width="156" height="30" rx="4" fill="#fcb53a"/>
+  <text x="518" y="219" font-size="11" fill="#b70b4a">Huang resigns, 12 Nov</text>
+  <text x="518" y="232" font-size="11" fill="#b70b4a">closed $166 (-4%)</text>
+
+</svg>
 </body>
 </html>
