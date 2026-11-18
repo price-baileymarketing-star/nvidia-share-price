@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Nvidia share price, Oct 2025 to Nov 2026</title>
+<style>
+  /* Fill the iframe; the host page sets the iframe height. */
+  html, body { height: 100%; margin: 0; }
+  #wrap { position: relative; width: 100%; height: 100%; min-height: 320px;
+          font-family: Arial, Helvetica, sans-serif; }
+</style>
+</head>
+<body>
+  <div id="wrap">
+    <canvas id="nvda"
+      role="img"
+      aria-label="Line chart of Nvidia share price in US dollars from late October 2025 to November 2026. Four events are marked: first company to reach a 5 trillion dollar value in late October 2025 at about 207 dollars, record high near 238 dollars in early October 2026, board opens an investigation on 8 November 2026, and Jensen Huang resigns on 12 November 2026 closing at 166 dollars after an intraday low of 148.80 dollars.">
+      Nvidia share price rose to a record near 238 dollars in early October 2026, then fell, closing at 166 dollars on 12 November 2026 after an intraday low of 148.80 dollars when Jensen Huang resigned.
+    </canvas>
+  </div>
+
+  <!-- Chart.js core plus the annotation plugin, from a public CDN -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/chartjs-plugin-annotation/3.0.1/chartjs-plugin-annotation.min.js"></script>
+  <script>
+    Chart.register(window['chartjs-plugin-annotation']);
+
+    // Price Bailey brand colours
+    var teal = '#008080', yellow = '#fcb53a', red = '#b70b4a';
+
+    // Month label helper for the time axis
+    var MN = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+    var d = function (y, m, day) { return Date.UTC(y, m, day); };
+    var fmt = function (ms) { var t = new Date(ms); return MN[t.getUTCMonth()] + ' ' + t.getUTCFullYear(); };
+
+    // Closing-price series. The four labelled events are verified against reporting;
+    // the interior monthly points are indicative and should be confirmed before publication.
+    var series = [
+      {x:d(2025,9,29), y:207}, {x:d(2025,11,31), y:187}, {x:d(2026,4,14), y:236},
+      {x:d(2026,5,30), y:200}, {x:d(2026,6,31), y:196}, {x:d(2026,7,31), y:215},
+      {x:d(2026,8,30), y:227}, {x:d(2026,9,2),  y:238}, {x:d(2026,9,31), y:206},
+      {x:d(2026,10,6), y:187}, {x:d(2026,10,10),y:169}, {x:d(2026,10,12),y:166}
+    ];
+
+    // Monthly x-axis ticks
+    var monthTicks = [], yy = 2025, mm = 10;
+    for (var i = 0; i < 13; i++) { monthTicks.push(Date.UTC(yy, mm, 1)); mm++; if (mm > 11) { mm = 0; yy++; } }
+
+    // Yellow marker for an event point
+    function pt(x, y) {
+      return { type:'point', xValue:x, yValue:y, radius:6, backgroundColor:yellow, borderColor:teal, borderWidth:1.5 };
+    }
+    // Yellow caption panel for an event, text in the given brand colour
+    function lbl(x, y, content, color, xA, yA) {
+      return { type:'label', xValue:x, yValue:y, content:content, color:color,
+               backgroundColor:yellow, padding:{x:5,y:3}, borderRadius:4, font:{size:11}, xAdjust:xA, yAdjust:yA };
+    }
+
+    new Chart(document.getElementById('nvda'), {
+      type: 'line',
+      data: {
+        datasets: [{
+          label: 'Share price',
+          data: series,
+          borderColor: teal,
+          backgroundColor: 'rgba(0,128,128,0.08)',
+          borderWidth: 2,
+          tension: 0.25,
+          fill: true,
+          pointRadius: 3,
+          pointBackgroundColor: teal,
+          pointBorderColor: teal
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        parsing: false,
+        layout: { padding: { top: 8, right: 14, left: 4 } },
+        plugins: {
+          legend: { display: false },
+          annotation: { annotations: {
+            // Four yellow event markers
+            p1: pt(d(2025,9,29), 207),
+            p2: pt(d(2026,9,2),  238),
+            p3: pt(d(2026,10,8), 180),   // 8 Nov interpolated (markets shut that weekend)
+            p4: pt(d(2026,10,12),166),
+            // Intraday low on 12 Nov, shown in red below the close
+            lowSeg: { type:'line', xMin:d(2026,10,12), xMax:d(2026,10,12), yMin:148.8, yMax:166,
+                      borderColor:red, borderWidth:1.5, borderDash:[3,3] },
+            lowPt:  { type:'point', xValue:d(2026,10,12), yValue:148.8, radius:4, backgroundColor:red, borderColor:red },
+            // Direct label for the red intraday-low mark
+            lowLbl: { type:'label', xValue:d(2026,10,12), yValue:148.8, content:'Intraday low $148.80',
+                      color:red, backgroundColor:'rgba(0,0,0,0)', font:{size:11}, xAdjust:-66, yAdjust:0 },
+            // Captions
+            l1: lbl(d(2025,9,29), 207, ['First to $5tn','Oct 2025'], teal, 42, -26),
+            l2: lbl(d(2026,9,2),  238, ['Record high ~$238','(~$5.7tn)'], teal, -4, -24),
+            l3: lbl(d(2026,10,8), 180, ['Investigation','opens, 8 Nov'], red, -48, -2),
+            l4: lbl(d(2026,10,12),166, ['Huang resigns, 12 Nov','closed $166 (-4%)'], red, -70, -20)
+          } }
+        },
+        scales: {
+          y: {
+            min: 140, max: 260,
+            title: { display: true, text: 'Share price (USD)', color: '#666', font: { size: 12 } },
+            ticks: { color: '#666', callback: function (v) { return '$' + v; } },
+            grid: { color: 'rgba(137,135,129,0.2)' }
+          },
+          x: {
+            type: 'linear',
+            min: d(2025,9,20), max: d(2026,10,22),
+            title: { display: true, text: 'Date', color: '#666', font: { size: 12 } },
+            afterBuildTicks: function (a) { a.ticks = monthTicks.map(function (v) { return { value:v }; }); },
+            ticks: { color: '#666', maxRotation: 45, callback: function (v) { return fmt(v); } },
+            grid: { display: false }
+          }
+        }
+      }
+    });
+  </script>
+</body>
+</html>
